@@ -1,0 +1,41 @@
+name: FocusLock
+options:
+  bundleIdPrefix: com.focuslock
+  deploymentTarget:
+    macOS: "13.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    MACOSX_DEPLOYMENT_TARGET: "13.0"
+targets:
+  FocusLock:
+    type: application
+    platform: macOS
+    sources:
+      - FocusLock
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.focuslock.app
+        INFOPLIST_FILE: FocusLock/Info.plist
+        GENERATE_INFOPLIST_FILE: false
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGN_STYLE: Manual
+        ENABLE_HARDENED_RUNTIME: false
+    entitlements:
+      path: FocusLock/FocusLock.entitlements
+      properties:
+        com.apple.security.app-sandbox: false
+  FocusLockTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - FocusLockTests
+    dependencies:
+      - target: FocusLock
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.focuslock.tests
+        GENERATE_INFOPLIST_FILE: true
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/FocusLock.app/Contents/MacOS/FocusLock"
+        BUNDLE_LOADER: "$(TEST_HOST)"
