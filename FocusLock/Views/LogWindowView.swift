@@ -77,8 +77,10 @@ struct LogEntryRow: View {
 
             Spacer()
 
-            // Add to blocklist button
-            if let bundleId = event.bundleIdentifier, !isAlreadyBlocked {
+            // Add to blocklist button (hidden for already blocked or protected apps)
+            if let bundleId = event.bundleIdentifier,
+               !isAlreadyBlocked,
+               settings.canBlockApp(bundleIdentifier: bundleId) {
                 Button {
                     settings.addBlockedApp(bundleIdentifier: bundleId, displayName: event.appName)
                 } label: {

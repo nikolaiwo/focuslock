@@ -37,8 +37,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     func applicationDidFinishLaunching(_ notification: Notification) {
         focusMonitor.startMonitoring()
 
+        // Request notification permission if enabled
+        if settings.notificationsEnabled {
+            notificationManager.requestPermission()
+        }
+
         focusMonitor.onFocusRestored = { [weak self] blockedApp, restoredApp in
             guard let self else { return }
+            print("Focus restored: blocked=\(blockedApp), restored=\(restoredApp), notificationsEnabled=\(self.settings.notificationsEnabled)")
             if self.settings.notificationsEnabled {
                 self.notificationManager.sendNotification(blockedApp: blockedApp, restoredApp: restoredApp)
             }
@@ -54,6 +60,9 @@ struct MenuContent: View {
     @ObservedObject var settings: SettingsStore
     @ObservedObject var notificationManager: NotificationManager
     let openWindow: OpenWindowAction
+
+    @State private var launchAtLogin = false
+    @State private var isUpdatingLaunchAtLogin = false
 
     var body: some View {
         Toggle("Protection Enabled", isOn: $settings.protectionEnabled)
@@ -79,20 +88,26 @@ struct MenuContent: View {
 
         Divider()
 
-        Toggle("Launch at Login", isOn: Binding(
-            get: { SMAppService.mainApp.status == .enabled },
-            set: { enabled in
+        Toggle("Launch at Login", isOn: $launchAtLogin)
+            .onAppear {
+                launchAtLogin = SMAppService.mainApp.status == .enabled
+            }
+            .onChange(of: launchAtLogin) { newValue in
+                guard !isUpdatingLaunchAtLogin else { return }
                 do {
-                    if enabled {
+                    if newValue {
                         try SMAppService.mainApp.register()
                     } else {
                         try SMAppService.mainApp.unregister()
                     }
                 } catch {
                     print("Failed to update launch at login: \(error)")
+                    // Revert the toggle on failure
+                    isUpdatingLaunchAtLogin = true
+                    launchAtLogin = SMAppService.mainApp.status == .enabled
+                    isUpdatingLaunchAtLogin = false
                 }
             }
-        ))
 
         Divider()
 

@@ -16,7 +16,7 @@ final class NotificationManager: ObservableObject {
     }
 
     func requestPermission() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { [weak self] granted, _ in
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { [weak self] granted, _ in
             DispatchQueue.main.async {
                 self?.permissionGranted = granted
             }
@@ -24,19 +24,25 @@ final class NotificationManager: ObservableObject {
     }
 
     func sendNotification(blockedApp: String, restoredApp: String) {
-        guard permissionGranted else { return }
+        print("sendNotification called: \(blockedApp) -> \(restoredApp)")
 
         let content = UNMutableNotificationContent()
         content.title = "Blocked \(blockedApp)"
         content.body = "Restored focus to \(restoredApp)"
-        content.sound = nil // Silent - just visual
+        content.sound = .default
 
         let request = UNNotificationRequest(
             identifier: UUID().uuidString,
             content: content,
-            trigger: nil // Deliver immediately
+            trigger: nil
         )
 
-        UNUserNotificationCenter.current().add(request)
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("Notification error: \(error)")
+            } else {
+                print("Notification queued successfully")
+            }
+        }
     }
 }

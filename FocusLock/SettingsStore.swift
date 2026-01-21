@@ -4,6 +4,9 @@ import SwiftUI
 final class SettingsStore: ObservableObject {
     private let defaults: UserDefaults
 
+    // Apps that cannot be blocked
+    static let protectedBundleIds = ["com.focuslock.app"]
+
     @Published var protectionEnabled: Bool {
         didSet { defaults.set(protectionEnabled, forKey: "protectionEnabled") }
     }
@@ -40,8 +43,14 @@ final class SettingsStore: ObservableObject {
         }
     }
 
+    func canBlockApp(bundleIdentifier: String?) -> Bool {
+        guard let bundleIdentifier else { return false }
+        return !Self.protectedBundleIds.contains(bundleIdentifier)
+    }
+
     func addBlockedApp(bundleIdentifier: String, displayName: String) {
         guard !isAppBlocked(bundleIdentifier: bundleIdentifier) else { return }
+        guard canBlockApp(bundleIdentifier: bundleIdentifier) else { return }
         blockedApps.append(BlockedApp(bundleIdentifier: bundleIdentifier, displayName: displayName))
     }
 

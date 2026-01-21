@@ -63,9 +63,11 @@ final class FocusMonitor: ObservableObject {
 
         if shouldBlock, let prevApp = currentApp {
             // Restore focus to previous app
+            print("BLOCKING: \(appName) (\(bundleId ?? "nil")), restoring to \(prevApp.localizedName ?? "Unknown")")
             restoreFocus(to: prevApp, blockedAppName: appName)
         } else {
             // Update tracking
+            print("Focus changed to: \(appName) (\(bundleId ?? "nil"))")
             previousApp = currentApp
             currentApp = app
         }
@@ -77,6 +79,7 @@ final class FocusMonitor: ObservableObject {
         // Activate the previous app to restore focus
         app.activate()
 
+        print("Calling onFocusRestored callback...")
         onFocusRestored?(blockedAppName, restoredAppName)
     }
 
