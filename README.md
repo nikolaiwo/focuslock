@@ -20,7 +20,7 @@ brew install nikolaiwo/focuslock/focuslock
 
 ### Manual
 
-Download the latest release from the [Releases page](https://github.com/nikolaiwo/focus-lock/releases), unzip, and drag `FocusLock.app` to your Applications folder.
+Download the latest release from the [Releases page](https://github.com/nikolaiwo/focuslock/releases), unzip, and drag `FocusLock.app` to your Applications folder.
 
 ## First Launch (unsigned app)
 
