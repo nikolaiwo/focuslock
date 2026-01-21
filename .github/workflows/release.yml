@@ -1,0 +1,66 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-release:
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Build Release
+        run: |
+          xcodebuild -project FocusLock.xcodeproj \
+            -scheme FocusLock \
+            -configuration Release \
+            -derivedDataPath build \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Package app
+        run: |
+          cd build/Build/Products/Release
+          zip -r FocusLock.zip FocusLock.app
+
+      - name: Calculate SHA256
+        id: sha
+        run: |
+          SHA=$(shasum -a 256 build/Build/Products/Release/FocusLock.zip | awk '{print $1}')
+          echo "sha256=$SHA" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: build/Build/Products/Release/FocusLock.zip
+          generate_release_notes: true
+
+      - name: Update Homebrew tap
+        env:
+          HOMEBREW_TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          SHA256=${{ steps.sha.outputs.sha256 }}
+
+          git clone https://x-access-token:${HOMEBREW_TAP_TOKEN}@github.com/nikolaiwo/homebrew-focuslock.git tap
+          cd tap
+
+          sed -i '' "s/version \".*\"/version \"${VERSION}\"/" Casks/focuslock.rb
+          sed -i '' "s/sha256 \".*\"/sha256 \"${SHA256}\"/" Casks/focuslock.rb
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Casks/focuslock.rb
+          git commit -m "chore: bump FocusLock to ${VERSION}"
+          git push
