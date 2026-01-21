@@ -16,6 +16,7 @@
 		60E06A6A262F6936FDCB9FA8 /* FocusMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6922874A327BD51AFE22E23 /* FocusMonitor.swift */; };
 		7EE109E73191FF20891E8C65 /* FocusEventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76FC7FD2CA139F16D083B7E /* FocusEventTests.swift */; };
 		893E249C4D70CA0D2A8319D8 /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75AD7CDE30E901B1773173C /* SettingsStore.swift */; };
+		C200C91C63D67038BA6D64FA /* LogWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E3D806F49C0186B4D0128F /* LogWindowView.swift */; };
 		CE01705C866EDE95AF543342 /* FocusLockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB8DF530A1A02FBD59B610CA /* FocusLockTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -34,6 +35,7 @@
 		23AC724978E6CF7DE73F0431 /* FocusLock.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FocusLock.entitlements; sourceTree = "<group>"; };
 		2F709265FECD4A182E5ED43B /* FocusLockApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusLockApp.swift; sourceTree = "<group>"; };
 		4169C9180AFB95F8BF5BC9CA /* FocusLockTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FocusLockTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		61E3D806F49C0186B4D0128F /* LogWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogWindowView.swift; sourceTree = "<group>"; };
 		7D8733F08A39382B6AE9EE5D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		92225BD262C1762AD004F175 /* FocusLock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FocusLock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1329FE2E391AD3BD16D273F /* FocusMonitorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusMonitorTests.swift; sourceTree = "<group>"; };
@@ -75,8 +77,17 @@
 				E4FA78745AB7241B902F9026 /* NotificationManager.swift */,
 				C75AD7CDE30E901B1773173C /* SettingsStore.swift */,
 				39AF113214F7C5AA30D41F0E /* Models */,
+				7406D1AB49DEA9A2F8AF3F12 /* Views */,
 			);
 			path = FocusLock;
+			sourceTree = "<group>";
+		};
+		7406D1AB49DEA9A2F8AF3F12 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				61E3D806F49C0186B4D0128F /* LogWindowView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		A222DBD0C8C594D0DC821734 /* FocusLockTests */ = {
@@ -191,6 +202,7 @@
 				2E5525A1D1206C59DB8EFD49 /* FocusEvent.swift in Sources */,
 				51C90FF7CE7688AC2427AA52 /* FocusLockApp.swift in Sources */,
 				60E06A6A262F6936FDCB9FA8 /* FocusMonitor.swift in Sources */,
+				C200C91C63D67038BA6D64FA /* LogWindowView.swift in Sources */,
 				34D982842EEC6C1D908F29B3 /* NotificationManager.swift in Sources */,
 				893E249C4D70CA0D2A8319D8 /* SettingsStore.swift in Sources */,
 			);
