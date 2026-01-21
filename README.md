@@ -15,7 +15,8 @@ A macOS menu bar app that prevents blocked apps from stealing window focus.
 ### Homebrew (recommended)
 
 ```bash
-brew install nikolaiwo/focuslock/focuslock
+brew tap nikolaiwo/focuslock
+brew install --cask focuslock
 ```
 
 To upgrade to the latest version:
